@@ -1,4 +1,3 @@
-import AdmZip from 'adm-zip';
 'use strict';
 
 /* Require Optional Dependencies */
@@ -6,6 +5,7 @@ try {
     var fs = require('fs-extra');
     var unzipper = require('unzipper');
     var archiver = require('archiver');
+    var AdmZip = require('adm-zip');
 } catch {
     fs = undefined;
     unzipper = undefined;
