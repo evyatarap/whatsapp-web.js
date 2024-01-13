@@ -1,3 +1,4 @@
+import AdmZip from 'adm-zip';
 'use strict';
 
 /* Require Optional Dependencies */
@@ -154,13 +155,15 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async unCompressSession(compressedSessionPath) {
-        var stream = fs.createReadStream(compressedSessionPath);
         await new Promise((resolve, reject) => {
-            stream.pipe(unzipper.Extract({
-                path: this.userDataDir
-            }))
-                .on('error', err => reject(err))
-                .on('finish', () => resolve());
+            const zip = new AdmZip(compressedSessionPath);
+            zip.extractAllToAsync(this.userDataDir, true, false, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
         await fs.promises.unlink(compressedSessionPath);
     }
